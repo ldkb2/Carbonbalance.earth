@@ -649,19 +649,20 @@
                     <h2 class="heading-lg">Let's talk.</h2>
                     <p class="body-text">Whether you're structuring a new fund, navigating carbon markets, or seeking independent climate finance expertise — get in touch.</p>
                 </div>
-                <form class="contact-form fade-in" onsubmit="event.preventDefault()">
+                <form class="contact-form fade-in" action="https://formspree.io/f/maqdnvze" method="POST">
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input type="text" id="name" placeholder="Your name">
+                        <input type="text" id="name" name="name" placeholder="Your name" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" placeholder="you@company.com">
+                        <input type="email" id="email" name="email" placeholder="you@company.com" required>
                     </div>
                     <div class="form-group">
                         <label for="message">Message</label>
-                        <textarea id="message" placeholder="Tell us about your goals..."></textarea>
+                        <textarea id="message" name="message" placeholder="Tell us about your goals..." required></textarea>
                     </div>
+                    <input type="hidden" name="_subject" value="New message from Carbon Balance website">
                     <button type="submit" class="form-submit">Send message</button>
                 </form>
             </div>
