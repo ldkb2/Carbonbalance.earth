@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Balance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dark-green: #15332a;
+            --canopy: #2a5c4a;
+            --sage: #a3b89f;
+            --light-sage: #d4ddd1;
+            --cream: #faf9f7;
+            --mid-green: #3d6b5a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, Helvetica Neue, sans-serif;
+            background: var(--cream);
+            color: var(--dark-green);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ── Typography ── */
+        .heading-xl {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-weight: 400;
+            font-size: clamp(42px, 5.5vw, 72px);
+            line-height: 1.1;
+            letter-spacing: -0.01em;
+        }
+        .heading-lg {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-weight: 400;
+            font-size: clamp(28px, 3.5vw, 44px);
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+        .heading-md {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-weight: 500;
+            font-size: clamp(20px, 2vw, 28px);
+            line-height: 1.3;
+        }
+        .body-text {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--canopy);
+        }
+        .body-small {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--sage);
+        }
+        .label {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--sage);
+        }
+        .hero-label {
+            color: #7a9a76;
+        }
+
+        /* ── Layout ── */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(24px, 5vw, 80px);
+        }
+        .hero .container {
+            padding-left: clamp(12px, 1vw, 20px);
+        }
+
+        /* ── Navigation ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: var(--dark-green);
+            transition: all 0.3s ease;
+        }
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 clamp(16px, 3vw, 40px) 0 clamp(4px, 1vw, 12px);
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-logo {
+            height: 62px;
+            width: auto;
+        }
+        .nav-links {
+            display: flex;
+            gap: 36px;
+            align-items: center;
+            list-style: none;
+        }
+        .nav-links a {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 13px;
+            color: var(--cream);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+        .nav-links a:hover { opacity: 1; }
+        .nav-cta {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 13px;
+            color: var(--dark-green) !important;
+            background: var(--cream);
+            padding: 10px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            opacity: 1 !important;
+            transition: background 0.2s ease;
+            letter-spacing: 0.02em;
+        }
+        .nav-cta:hover { background: var(--light-sage); }
+
+        /* ── Hero ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 72px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(250, 249, 247, 0.72);
+        }
+        .hero-inner {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+        .hero-content {
+            max-width: 580px;
+            padding-top: 20px;
+        }
+        .hero-content .body-text {
+            background: rgba(250, 249, 247, 0.35);
+            padding: 20px 24px;
+            border-radius: 8px;
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
+        .hero-bookmark {
+            flex-shrink: 0;
+            width: clamp(260px, 35vw, 480px);
+            height: auto;
+            margin-top: 0;
+        }
+        .hero-label {
+            margin-bottom: 24px;
+        }
+        .hero h1 {
+            margin-bottom: 32px;
+        }
+        .hero .body-text {
+            max-width: 480px;
+            margin-bottom: 0;
+        }
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            color: var(--cream);
+            background: var(--dark-green);
+            padding: 16px 36px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            letter-spacing: 0.02em;
+        }
+        .hero-cta:hover {
+            background: var(--canopy);
+            transform: translateY(-1px);
+        }
+        .hero-cta svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.2s ease;
+        }
+        .hero-cta:hover svg { transform: translateX(3px); }
+
+        /* ── Statement ── */
+        .statement {
+            padding: 40px 0 48px 0;
+        }
+        .statement-inner {
+            max-width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px 80px;
+            align-items: start;
+        }
+        .statement .heading-lg {
+            margin-bottom: 0;
+        }
+        .statement-body {
+            max-width: 100%;
+        }
+
+        /* ── Divider ── */
+        .divider {
+            border: none;
+            height: 1px;
+            background: var(--sage);
+        }
+
+        /* ── Areas ── */
+        .areas {
+            padding: 60px 0 80px 0;
+        }
+        .areas-header {
+            margin-bottom: 48px;
+            max-width: 560px;
+        }
+        .areas-header .label { margin-bottom: 16px; }
+        .areas-header .heading-lg { margin-bottom: 20px; }
+        .areas-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 48px;
+        }
+        .area {
+            padding-top: 32px;
+            border-top: 1px solid var(--light-sage);
+        }
+        .area .heading-md {
+            margin-bottom: 12px;
+        }
+
+        /* ── Bio ── */
+        .bio {
+            padding: 100px 0;
+            background: var(--dark-green);
+            color: var(--cream);
+        }
+        .bio-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            gap: 100px;
+            align-items: start;
+        }
+        .bio-left .label {
+            color: var(--sage);
+            margin-bottom: 16px;
+        }
+        .bio-left .heading-lg {
+            color: var(--cream);
+            margin-bottom: 24px;
+        }
+        .bio-right .body-text {
+            color: var(--sage);
+            margin-bottom: 28px;
+        }
+        .bio-right .body-text:last-child { margin-bottom: 0; }
+        .credentials {
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid rgba(163, 184, 159, 0.2);
+        }
+        .credentials .label {
+            color: var(--sage);
+            margin-bottom: 16px;
+        }
+        .credential-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 24px;
+        }
+        .credential-list span {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            color: var(--cream);
+            opacity: 0.8;
+        }
+
+        /* ── Impact ── */
+        .impact-bar {
+            margin-top: 80px;
+            padding-top: 48px;
+            border-top: 1px solid rgba(163, 184, 159, 0.15);
+        }
+        .impact-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+        }
+        .impact-metric {
+            text-align: center;
+        }
+        .impact-number {
+            display: block;
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-weight: 400;
+            font-size: clamp(36px, 4vw, 52px);
+            color: var(--cream);
+            line-height: 1.1;
+            margin-bottom: 12px;
+        }
+        .impact-label {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 13px;
+            color: var(--sage);
+            line-height: 1.5;
+            opacity: 0.7;
+        }
+
+        /* ── Affiliations ── */
+        .affiliations {
+            margin-top: 80px;
+            padding-top: 48px;
+            border-top: 1px solid rgba(163, 184, 159, 0.15);
+        }
+        .affiliation-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        .affiliation {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-weight: 400;
+            font-size: 18px;
+            color: var(--sage);
+            letter-spacing: 0.03em;
+            opacity: 0.7;
+        }
+        .affiliation-dot {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: var(--sage);
+            opacity: 0.4;
+            flex-shrink: 0;
+        }
+
+        /* ── Governance ── */
+        .governance {
+            padding: 100px 0;
+        }
+        .governance-inner {
+            max-width: 720px;
+        }
+        .governance .label { margin-bottom: 16px; }
+        .governance .heading-lg { margin-bottom: 20px; }
+        .governance-roles {
+            display: flex;
+            gap: 48px;
+            margin-top: 40px;
+        }
+        .governance-role {
+            flex: 1;
+            padding-top: 24px;
+            border-top: 1px solid var(--light-sage);
+        }
+        .governance-role .heading-md { margin-bottom: 10px; }
+
+        /* ── Contact ── */
+        .contact {
+            padding: 120px 0;
+            border-top: 1px solid var(--light-sage);
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start;
+        }
+        .contact-left .label { margin-bottom: 16px; }
+        .contact-left .heading-lg { margin-bottom: 20px; }
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 12px;
+            letter-spacing: 0.06em;
+            color: var(--canopy);
+            margin-bottom: 8px;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--light-sage);
+            border-radius: 6px;
+            background: #ffffff;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 14px;
+            color: var(--dark-green);
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--sage);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        .form-submit {
+            align-self: flex-start;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            color: var(--cream);
+            background: var(--dark-green);
+            border: none;
+            padding: 14px 36px;
+            border-radius: 6px;
+            cursor: pointer;
+            letter-spacing: 0.02em;
+            transition: background 0.2s ease;
+        }
+        .form-submit:hover { background: var(--canopy); }
+
+        /* ── Footer ── */
+        footer {
+            padding: 48px 0;
+            border-top: 1px solid var(--light-sage);
+        }
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .footer-logo { height: 56px; width: auto; opacity: 0.6; }
+        .footer-copy {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 12px;
+            color: var(--sage);
+        }
+
+        /* ── Animations ── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .areas-grid { grid-template-columns: 1fr; gap: 40px; }
+            .bio-grid { grid-template-columns: 1fr; gap: 40px; }
+            .governance-roles { flex-direction: column; gap: 32px; }
+            .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+            .nav-links { display: none; }
+            .impact-metrics { grid-template-columns: 1fr; gap: 32px; }
+            .hero-content { max-width: 100%; }
+            .hero-bookmark { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-inner">
+            <a href="#">
+                <svg class="nav-logo" viewBox="0 0 480 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <style>
+                            .nav-wm { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; font-size: 52px; fill: #faf9f7; letter-spacing: 0.02em; word-spacing: -0.08em; }
+                        </style>
+                    </defs>
+                    <g transform="translate(0, 7) scale(0.22)">
+                        <polygon points="200,80 314,163 271,297 129,297 86,163" fill="#faf9f7" stroke="#faf9f7" stroke-width="3" stroke-linejoin="round"/>
+                        <line x1="200" y1="80" x2="200" y2="200" stroke="#15332a" stroke-width="6" opacity="0.5"/>
+                        <line x1="200" y1="200" x2="86" y2="163" stroke="#15332a" stroke-width="6" opacity="0.5"/>
+                        <line x1="200" y1="200" x2="314" y2="163" stroke="#15332a" stroke-width="6" opacity="0.5"/>
+                        <line x1="200" y1="200" x2="129" y2="297" stroke="#15332a" stroke-width="6" opacity="0.5"/>
+                        <line x1="200" y1="200" x2="271" y2="297" stroke="#15332a" stroke-width="6" opacity="0.5"/>
+                    </g>
+                    <text x="92" y="76" class="nav-wm">Carbon Balance</text>
+                </svg>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#approach">Areas of Expertise</a></li>
+                <li><a href="#impact">About</a></li>
+                <li><a href="#contact" class="nav-cta">Get in touch</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-bg">
+            <img id="hero-img" src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1600&q=80" alt="Tropical forest">
+        </div>
+        <div class="container">
+            <div class="hero-inner">
+                <div class="hero-content">
+                    <div class="label hero-label">Climate &amp; Sustainability Advisory</div>
+                    <h1 class="heading-xl">Where climate strategy<br>meets capital.</h1>
+                    <p class="body-text">Carbon Balance is an independent climate finance advisory that helps institutions structure, launch, and deploy capital into the climate and sustainability transition. Built on decades of experience across climate and sustainability finance — and a deep network spanning finance, government, and philanthropy.</p>
+                </div>
+                <svg class="hero-bookmark" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="200,80 314,163 271,297 129,297 86,163" fill="none" stroke="#15332a" stroke-width="0.8"/>
+                    <line x1="200" y1="80" x2="200" y2="200" stroke="#15332a" stroke-width="0.5"/>
+                    <line x1="200" y1="200" x2="86" y2="163" stroke="#15332a" stroke-width="0.5"/>
+                    <line x1="200" y1="200" x2="314" y2="163" stroke="#15332a" stroke-width="0.5"/>
+                    <line x1="200" y1="200" x2="129" y2="297" stroke="#15332a" stroke-width="0.5"/>
+                    <line x1="200" y1="200" x2="271" y2="297" stroke="#15332a" stroke-width="0.5"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statement -->
+    <section class="statement">
+        <div class="container">
+            <div class="statement-inner fade-in">
+                <h2 class="heading-lg">The world's carbon equation<br>is out of balance.</h2>
+                <div class="statement-body">
+                    <p class="body-text">Carbon emissions continue to outpace the world's capacity to absorb and adapt to them. The capital and technologies to reverse this exist — but they are not being deployed at the speed or scale required.</p>
+                    <p class="body-text" style="margin-top: 16px;">Carbon Balance works with institutions to close that gap, providing independent advisory that turns climate ambition into investable action.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container"><hr class="divider"></div>
+
+    <!-- Areas of Work -->
+    <section class="areas" id="approach">
+        <div class="container">
+            <div class="areas-header fade-in">
+                <div class="label">Areas of Work</div>
+                <h2 class="heading-lg">Practical expertise across climate finance and sustainability.</h2>
+            </div>
+            <div class="areas-grid">
+                <div class="area fade-in">
+                    <h3 class="heading-md">Strategy</h3>
+                    <p class="body-text">Helping institutions design and build their climate and sustainability capabilities — whether establishing a new department, developing an investment thesis, or positioning an organisation for the transition.</p>
+                </div>
+                <div class="area fade-in">
+                    <h3 class="heading-md">Investment Structuring &amp; Product Design</h3>
+                    <p class="body-text">Designing and launching climate and sustainability investment vehicles across asset classes — including private equity, private credit, and hedge funds — from fund concept and financial structuring through to first close and product governance.</p>
+                </div>
+                <div class="area fade-in">
+                    <h3 class="heading-md">Capital Mobilisation</h3>
+                    <p class="body-text">Strategic advisory on fundraising and capital mobilisation — from developing the investor narrative and targeting strategy through to LP engagement and catalytic commitments.</p>
+                </div>
+                <div class="area fade-in">
+                    <h3 class="heading-md">Carbon Markets &amp; Policy</h3>
+                    <p class="body-text">Advisory on carbon market design, transaction structuring, and the evolving policy landscape — from Article 6 and CORSIA to voluntary markets and emerging nature credits.</p>
+                </div>
+                <div class="area fade-in">
+                    <h3 class="heading-md">Philanthropy &amp; Impact</h3>
+                    <p class="body-text">Advising foundations, family offices, and mission-driven institutions on climate and sustainability strategy, grant design, and deploying capital for impact — from catalytic philanthropy to impact-first investment.</p>
+                </div>
+                <div class="area fade-in">
+                    <h3 class="heading-md">Research &amp; Convenings</h3>
+                    <p class="body-text">Producing research and analysis on climate finance markets, and designing and facilitating expert convenings that bring together investors, policymakers, and practitioners.</p>
+                </div>
+                <div class="area fade-in">
+                    <h3 class="heading-md">Board &amp; Investment Committee</h3>
+                    <p class="body-text">Drawing on experience across multiple boards and investment committees, advising on governance design, IC process, and fiduciary oversight for climate-focused funds and mission-driven organisations. Also available for direct board and IC roles.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bio -->
+    <section class="bio" id="impact">
+        <div class="container">
+            <div class="bio-grid fade-in">
+                <div class="bio-left">
+                    <div class="label">About</div>
+                    <h2 class="heading-lg">Lorenzo Bernasconi</h2>
+                </div>
+                <div class="bio-right">
+                    <p class="body-text">Lorenzo is a climate and sustainability finance expert with over 20 years of experience across investment banking, asset management, and philanthropy. At Lombard Odier Investment Managers, he served as head of climate and environmental solutions, where he spearheaded the firm's expansion into private markets, building a carbon investment platform and circularity private equity fund. He co-managed the Rockefeller Foundation's Zero Gap Fund, mobilising over $1B in private capital, and was founding board chair of the LEAF Coalition, the largest public-private initiative for tropical forest protection, with over $1.5B in commitments. He previously worked at BCG, UBS Investment Bank, and Dalberg.</p>
+                    <p class="body-text">He sits on the board and investment committee of the Independent Social Research Foundation and on the board of Spring Bank, the country's highest-ranked B Corp bank. His clients span private banks, asset managers, multilateral development banks, family offices, foundations, and corporates globally.</p>
+                    <p class="body-text">Lorenzo holds a PhD from Cambridge and a BSc from the London School of Economics. He was a research fellow at Stanford and Columbia's Earth Institute. He is fluent in English, Spanish, and French.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="contact-grid">
+                <div class="contact-left fade-in">
+                    <div class="label">Get in Touch</div>
+                    <h2 class="heading-lg">Let's talk.</h2>
+                    <p class="body-text">Whether you're structuring a new fund, navigating carbon markets, or seeking independent climate finance expertise — get in touch.</p>
+                </div>
+                <form class="contact-form fade-in" onsubmit="event.preventDefault()">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="you@company.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" placeholder="Tell us about your goals..."></textarea>
+                    </div>
+                    <button type="submit" class="form-submit">Send message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <svg class="footer-logo" viewBox="0 0 480 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="footGrad" x1="50%" y1="0%" x2="50%" y2="100%">
+                            <stop offset="0%" style="stop-color:#2a5c4a"/>
+                            <stop offset="100%" style="stop-color:#15332a"/>
+                        </linearGradient>
+                    </defs>
+                    <g transform="translate(0, 10.7) scale(0.22)">
+                        <polygon points="200,80 314,163 271,297 129,297 86,163" fill="url(#footGrad)" stroke="#15332a" stroke-width="3" stroke-linejoin="round"/>
+                        <line x1="200" y1="80" x2="200" y2="200" stroke="#faf9f7" stroke-width="6" opacity="0.5"/>
+                        <line x1="200" y1="200" x2="86" y2="163" stroke="#faf9f7" stroke-width="6" opacity="0.5"/>
+                        <line x1="200" y1="200" x2="314" y2="163" stroke="#faf9f7" stroke-width="6" opacity="0.5"/>
+                        <line x1="200" y1="200" x2="129" y2="297" stroke="#faf9f7" stroke-width="6" opacity="0.5"/>
+                        <line x1="200" y1="200" x2="271" y2="297" stroke="#faf9f7" stroke-width="6" opacity="0.5"/>
+                    </g>
+                    <text x="92" y="76" font-family="Cormorant Garamond, Georgia, serif" font-weight="500" font-size="52" fill="#15332a" letter-spacing="0.02em" word-spacing="-0.08em">Carbon Balance</text>
+                </svg>
+                <span class="footer-copy">&copy; 2026 Carbon Balance. All rights reserved.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Hero image — single image for now
+        // Can add rotation later with multiple images
+
+        // Intersection Observer for fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Nav shadow on scroll
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                nav.style.boxShadow = '0 1px 20px rgba(21,51,42,0.06)';
+            } else {
+                nav.style.boxShadow = 'none';
+            }
+        });
+    </script>
+
+</body>
+</html>
