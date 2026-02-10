@@ -3,7 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carbon Balance</title>
+    <title>Carbon Balance — Independent Climate Finance Advisory</title>
+    <meta name="description" content="Carbon Balance is an independent climate finance advisory helping institutions structure, launch, and deploy capital into the climate and sustainability transition.">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Carbon Balance — Independent Climate Finance Advisory">
+    <meta property="og:description" content="Helping institutions structure, launch, and deploy capital into the climate and sustainability transition.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1200&q=80">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Carbon Balance — Independent Climate Finance Advisory">
+    <meta name="twitter:description" content="Helping institutions structure, launch, and deploy capital into the climate and sustainability transition.">
+
+    <!-- Favicon (inline SVG) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='50 40 300 300'%3E%3Cpolygon points='200,80 314,163 271,297 129,297 86,163' fill='%2315332a'/%3E%3Cline x1='200' y1='80' x2='200' y2='200' stroke='%23faf9f7' stroke-width='6' opacity='0.5'/%3E%3Cline x1='200' y1='200' x2='86' y2='163' stroke='%23faf9f7' stroke-width='6' opacity='0.5'/%3E%3Cline x1='200' y1='200' x2='314' y2='163' stroke='%23faf9f7' stroke-width='6' opacity='0.5'/%3E%3Cline x1='200' y1='200' x2='129' y2='297' stroke='%23faf9f7' stroke-width='6' opacity='0.5'/%3E%3Cline x1='200' y1='200' x2='271' y2='297' stroke='%23faf9f7' stroke-width='6' opacity='0.5'/%3E%3C/svg%3E">
+
+    <!-- Preconnect for faster font loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -76,6 +95,11 @@
         }
         .hero-label {
             color: #7a9a76;
+        }
+
+        /* ── Scroll offset for fixed nav ── */
+        [id] {
+            scroll-margin-top: 88px;
         }
 
         /* ── Layout ── */
@@ -271,9 +295,17 @@
         .area {
             padding-top: 32px;
             border-top: 1px solid var(--light-sage);
+            transition: border-color 0.3s ease;
+        }
+        .area:hover {
+            border-top-color: var(--canopy);
         }
         .area .heading-md {
             margin-bottom: 12px;
+        }
+        .area:last-child {
+            grid-column: 1 / -1;
+            max-width: 50%;
         }
 
         /* ── Bio ── */
@@ -470,6 +502,15 @@
             transition: background 0.2s ease;
         }
         .form-submit:hover { background: var(--canopy); }
+        .form-submit:active { transform: translateY(1px); }
+        .form-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .form-group input:invalid:not(:placeholder-shown),
+        .form-group textarea:invalid:not(:placeholder-shown) {
+            border-color: #c88;
+        }
 
         /* ── Footer ── */
         footer {
@@ -500,17 +541,70 @@
             transform: translateY(0);
         }
 
+        /* ── Accessibility ── */
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: 16px;
+            background: var(--dark-green);
+            color: var(--cream);
+            padding: 12px 24px;
+            border-radius: 0 0 6px 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            text-decoration: none;
+            z-index: 200;
+            transition: top 0.2s ease;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+        *:focus-visible {
+            outline: 2px solid var(--canopy);
+            outline-offset: 3px;
+        }
+        nav *:focus-visible {
+            outline-color: var(--cream);
+        }
+        .bio *:focus-visible {
+            outline-color: var(--sage);
+        }
+
+        /* ── Pentagon Divider ── */
+        .pentagon-divider {
+            display: none;
+            text-align: center;
+            padding: 12px 0;
+        }
+        .pentagon-divider svg {
+            width: 100px;
+            height: 100px;
+            opacity: 0.5;
+        }
+
         /* ── Photo Break ── */
         .photo-break {
             display: none;
             width: 100%;
             height: 240px;
             overflow: hidden;
+            position: relative;
         }
         .photo-break img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center 70%;
+        }
+        .photo-break::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(250, 249, 247, 0.45);
+            z-index: 1;
+        }
+        .bio-prism {
+            display: none;
         }
 
         /* ── Hamburger Menu ── */
@@ -573,6 +667,7 @@
         /* ── Responsive ── */
         @media (max-width: 900px) {
             .areas-grid { grid-template-columns: 1fr; gap: 40px; }
+            .area:last-child { max-width: 100%; }
             .bio-grid { grid-template-columns: 1fr; gap: 40px; }
             .governance-roles { flex-direction: column; gap: 32px; }
             .contact-grid { grid-template-columns: 1fr; gap: 48px; }
@@ -580,34 +675,46 @@
             .hamburger { display: block; }
             .nav-inner { height: 56px; }
             .nav-logo { height: 48px; }
-            .hero { padding-top: 56px; min-height: auto; padding-bottom: 60px; }
-            .hero-content { padding-top: 0; }
+            .hero { padding-top: 56px; min-height: auto; padding-bottom: 40px; }
+            .hero-content { padding-top: 24px; }
+            .hero h1 { margin-bottom: 24px; }
+            .hero-label { margin-bottom: 16px; }
             .mobile-menu { top: 56px; }
             .impact-metrics { grid-template-columns: 1fr; gap: 32px; }
             .hero-content { max-width: 100%; }
             .hero-bookmark { display: none; }
             .statement-inner { grid-template-columns: 1fr; gap: 24px; }
-            .statement { padding: 32px 0 40px 0; }
+            .statement { padding: 28px 0 12px 0; }
             .heading-xl { font-size: clamp(32px, 8vw, 42px); }
             .heading-lg { font-size: clamp(24px, 6vw, 32px); }
             .heading-md { font-size: clamp(22px, 5vw, 26px); }
             .hero-content .body-text { font-size: 14px; padding: 16px 18px; }
-            .areas { padding: 40px 0 60px 0; }
-            .bio { padding: 60px 0; }
-            .bio-grid { gap: 40px; }
-            .contact { padding: 60px 0; }
+            .areas { padding: 28px 0 28px 0; }
+            .bio { padding: 48px 0; }
+            .bio-grid { gap: 24px; }
+            .contact { padding: 68px 0; }
             .contact-grid { gap: 32px; }
             .photo-break { display: block; }
+            .pentagon-divider { display: block; }
+            .divider { display: none; }
+            .bio-left { position: relative; }
+            .bio-prism { display: block; position: absolute; right: 0; bottom: 0; width: 110px; opacity: 0.7; }
+            .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
+            .footer-logo { height: 44px; }
+            footer { padding: 32px 0; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Skip to main content (accessibility) -->
+    <a href="#main" class="skip-link">Skip to main content</a>
+
     <!-- Navigation -->
-    <nav>
+    <nav role="navigation" aria-label="Main navigation">
         <div class="nav-inner">
-            <a href="#">
-                <svg class="nav-logo" viewBox="0 0 480 100" xmlns="http://www.w3.org/2000/svg">
+            <a href="#" aria-label="Carbon Balance — Home">
+                <svg class="nav-logo" viewBox="0 0 480 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Carbon Balance logo">
                     <defs>
                         <style>
                             .nav-wm { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; font-size: 52px; fill: #faf9f7; letter-spacing: 0.02em; word-spacing: -0.08em; }
@@ -643,9 +750,10 @@
     </div>
 
     <!-- Hero -->
+    <main id="main">
     <section class="hero">
         <div class="hero-bg">
-            <img id="hero-img" src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1600&q=80" alt="Tropical forest">
+            <img id="hero-img" src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1600&q=80" alt="Sunlight filtering through a dense tropical forest canopy" fetchpriority="high">
         </div>
         <div class="container">
             <div class="hero-inner">
@@ -654,7 +762,7 @@
                     <h1 class="heading-xl">Where climate strategy<br>meets capital.</h1>
                     <p class="body-text">Carbon Balance is an independent climate finance advisory that helps institutions structure, launch, and deploy capital into the climate and sustainability transition. Built on decades of experience across climate and sustainability finance — and a deep network spanning finance, government, and philanthropy.</p>
                 </div>
-                <svg class="hero-bookmark" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                <svg class="hero-bookmark" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <polygon points="200,80 314,163 271,297 129,297 86,163" fill="none" stroke="#15332a" stroke-width="0.8"/>
                     <line x1="200" y1="80" x2="200" y2="200" stroke="#15332a" stroke-width="0.5"/>
                     <line x1="200" y1="200" x2="86" y2="163" stroke="#15332a" stroke-width="0.5"/>
@@ -680,6 +788,18 @@
     </section>
 
     <div class="container"><hr class="divider"></div>
+
+    <!-- Pentagon Divider (mobile only) -->
+    <div class="pentagon-divider" aria-hidden="true">
+        <svg viewBox="50 40 300 300" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="200,80 314,163 271,297 129,297 86,163" fill="none" stroke="#2a5c4a" stroke-width="4"/>
+            <line x1="200" y1="80" x2="200" y2="200" stroke="#2a5c4a" stroke-width="3"/>
+            <line x1="200" y1="200" x2="86" y2="163" stroke="#2a5c4a" stroke-width="3"/>
+            <line x1="200" y1="200" x2="314" y2="163" stroke="#2a5c4a" stroke-width="3"/>
+            <line x1="200" y1="200" x2="129" y2="297" stroke="#2a5c4a" stroke-width="3"/>
+            <line x1="200" y1="200" x2="271" y2="297" stroke="#2a5c4a" stroke-width="3"/>
+        </svg>
+    </div>
 
     <!-- Areas of Work -->
     <section class="areas" id="approach">
@@ -723,7 +843,7 @@
 
     <!-- Photo Break (mobile only) -->
     <div class="photo-break">
-        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80" alt="Mountain valley landscape">
+        <img src="https://images.unsplash.com/photo-1439853949127-fa647821eba0?w=800&q=80" alt="Misty lake surrounded by forested hills" loading="lazy">
     </div>
 
     <!-- Bio -->
@@ -733,9 +853,17 @@
                 <div class="bio-left">
                     <div class="label">About</div>
                     <h2 class="heading-lg">Lorenzo Bernasconi</h2>
+                    <svg class="bio-prism" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <polygon points="200,80 314,163 271,297 129,297 86,163" fill="none" stroke="#faf9f7" stroke-width="3"/>
+                        <line x1="200" y1="80" x2="200" y2="200" stroke="#faf9f7" stroke-width="2"/>
+                        <line x1="200" y1="200" x2="86" y2="163" stroke="#faf9f7" stroke-width="2"/>
+                        <line x1="200" y1="200" x2="314" y2="163" stroke="#faf9f7" stroke-width="2"/>
+                        <line x1="200" y1="200" x2="129" y2="297" stroke="#faf9f7" stroke-width="2"/>
+                        <line x1="200" y1="200" x2="271" y2="297" stroke="#faf9f7" stroke-width="2"/>
+                    </svg>
                 </div>
                 <div class="bio-right">
-                    <p class="body-text">Lorenzo is a climate and sustainability finance expert with over 20 years of experience across investment banking, asset management, and philanthropy. At Lombard Odier Investment Managers, he served as head of climate and environmental solutions, where he spearheaded the firm's expansion into private markets, building a carbon investment platform and circularity private equity fund. He co-managed the Rockefeller Foundation's Zero Gap Fund, mobilising over $1B in private capital, and was founding board chair of the LEAF Coalition, the largest public-private initiative for tropical forest protection, with over $1.5B in commitments. He previously worked at BCG, UBS Investment Bank, and Dalberg.</p>
+                    <p class="body-text">Lorenzo is a climate and sustainability finance expert with over 20 years of experience across investment banking, asset management, and philanthropy. At Lombard Odier Investment Managers, he served as head of climate and environmental solutions, where he spearheaded the firm's expansion into private markets, building a carbon investment platform and circularity private equity fund. He co-managed the Rockefeller Foundation's Zero Gap Fund, directly mobilising over $1B in private capital, and was founding board chair of the LEAF Coalition, the largest public-private initiative for tropical forest protection, with over $1.5B in commitments. He previously worked at BCG, UBS Investment Bank, and Dalberg.</p>
                     <p class="body-text">He sits on the board and investment committee of the Independent Social Research Foundation and on the board of Spring Bank, the country's highest-ranked B Corp bank. His clients span private banks, asset managers, multilateral development banks, family offices, foundations, and corporates globally.</p>
                     <p class="body-text">Lorenzo holds a PhD from Cambridge and a BSc from the London School of Economics. He was a research fellow at Stanford and Columbia's Earth Institute. He is fluent in English, Spanish, and French.</p>
                 </div>
@@ -767,16 +895,19 @@
                     </div>
                     <button type="submit" class="form-submit">Send message</button>
                     <p class="form-success" style="display:none; margin-top: 16px; color: var(--canopy); font-family: 'Inter', sans-serif; font-size: 15px;">Thank you — your message has been sent.</p>
+                    <p class="form-error-msg" style="display:none; margin-top: 16px; color: #b44; font-family: 'Inter', sans-serif; font-size: 14px;">Something went wrong. Please try again or email directly.</p>
                 </form>
             </div>
         </div>
     </section>
 
+    </main>
+
     <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-inner">
-                <svg class="footer-logo" viewBox="0 0 480 100" xmlns="http://www.w3.org/2000/svg">
+                <svg class="footer-logo" viewBox="0 0 480 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Carbon Balance logo">
                     <defs>
                         <linearGradient id="footGrad" x1="50%" y1="0%" x2="50%" y2="100%">
                             <stop offset="0%" style="stop-color:#2a5c4a"/>
@@ -840,8 +971,11 @@
 
         // Contact form — submit via fetch so user stays on page
         const contactForm = document.getElementById('contact-form');
+        const submitBtn = contactForm.querySelector('.form-submit');
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
             const data = new FormData(contactForm);
             fetch('https://formspree.io/f/maqdnvze', {
                 method: 'POST',
@@ -850,9 +984,17 @@
             }).then(response => {
                 if (response.ok) {
                     contactForm.querySelector('.form-success').style.display = 'block';
-                    contactForm.querySelector('button').style.display = 'none';
+                    submitBtn.style.display = 'none';
                     contactForm.querySelectorAll('.form-group').forEach(g => g.style.display = 'none');
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send message';
+                    contactForm.querySelector('.form-error-msg').style.display = 'block';
                 }
+            }).catch(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send message';
+                contactForm.querySelector('.form-error-msg').style.display = 'block';
             });
         });
     </script>
