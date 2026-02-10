@@ -649,7 +649,7 @@
                     <h2 class="heading-lg">Let's talk.</h2>
                     <p class="body-text">Whether you're structuring a new fund, navigating carbon markets, or seeking independent climate finance expertise — get in touch.</p>
                 </div>
-                <form class="contact-form fade-in" action="https://formspree.io/f/maqdnvze" method="POST">
+                <form class="contact-form fade-in" id="contact-form">
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" id="name" name="name" placeholder="Your name" required>
@@ -662,9 +662,8 @@
                         <label for="message">Message</label>
                         <textarea id="message" name="message" placeholder="Share a bit about what you're working on..." required></textarea>
                     </div>
-                    <input type="hidden" name="_subject" value="New message from Carbon Balance website">
-                    <input type="hidden" name="_next" value="https://carbonbalance.earth/#contact">
                     <button type="submit" class="form-submit">Send message</button>
+                    <p class="form-success" style="display:none; margin-top: 16px; color: var(--canopy); font-family: 'Inter', sans-serif; font-size: 15px;">Thank you — your message has been sent.</p>
                 </form>
             </div>
         </div>
@@ -719,6 +718,24 @@
             } else {
                 nav.style.boxShadow = 'none';
             }
+        });
+
+        // Contact form — submit via fetch so user stays on page
+        const contactForm = document.getElementById('contact-form');
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const data = new FormData(contactForm);
+            fetch('https://formspree.io/f/maqdnvze', {
+                method: 'POST',
+                body: data,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    contactForm.querySelector('.form-success').style.display = 'block';
+                    contactForm.querySelector('button').style.display = 'none';
+                    contactForm.querySelectorAll('.form-group').forEach(g => g.style.display = 'none');
+                }
+            });
         });
     </script>
 
