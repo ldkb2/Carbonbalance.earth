@@ -500,6 +500,19 @@
             transform: translateY(0);
         }
 
+        /* ── Photo Break ── */
+        .photo-break {
+            display: none;
+            width: 100%;
+            height: 240px;
+            overflow: hidden;
+        }
+        .photo-break img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         /* ── Hamburger Menu ── */
         .hamburger {
             display: none;
@@ -567,7 +580,8 @@
             .hamburger { display: block; }
             .nav-inner { height: 56px; }
             .nav-logo { height: 48px; }
-            .hero { padding-top: 56px; }
+            .hero { padding-top: 56px; min-height: auto; padding-bottom: 60px; }
+            .hero-content { padding-top: 0; }
             .mobile-menu { top: 56px; }
             .impact-metrics { grid-template-columns: 1fr; gap: 32px; }
             .hero-content { max-width: 100%; }
@@ -576,12 +590,14 @@
             .statement { padding: 32px 0 40px 0; }
             .heading-xl { font-size: clamp(32px, 8vw, 42px); }
             .heading-lg { font-size: clamp(24px, 6vw, 32px); }
+            .heading-md { font-size: clamp(22px, 5vw, 26px); }
             .hero-content .body-text { font-size: 14px; padding: 16px 18px; }
             .areas { padding: 40px 0 60px 0; }
             .bio { padding: 60px 0; }
             .bio-grid { gap: 40px; }
             .contact { padding: 60px 0; }
             .contact-grid { gap: 32px; }
+            .photo-break { display: block; }
         }
     </style>
 </head>
@@ -704,6 +720,11 @@
             </div>
         </div>
     </section>
+
+    <!-- Photo Break (mobile only) -->
+    <div class="photo-break">
+        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80" alt="Mountain valley landscape">
+    </div>
 
     <!-- Bio -->
     <section class="bio" id="impact">
