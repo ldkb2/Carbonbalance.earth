@@ -228,6 +228,9 @@
             max-width: 480px;
             margin-bottom: 0;
         }
+        .mobile-break {
+            display: none;
+        }
         .hero-cta {
             display: inline-flex;
             align-items: center;
@@ -668,8 +671,47 @@
 
         /* ── Responsive ── */
         @media (max-width: 900px) {
-            .areas-grid { grid-template-columns: 1fr; gap: 40px; }
+            .areas-grid { grid-template-columns: 1fr; gap: 0; }
             .area:last-child { max-width: 100%; }
+            .area {
+                padding: 0;
+                border-top: none;
+                border-bottom: 1px solid var(--light-sage);
+            }
+            .area .heading-md {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                cursor: pointer;
+                padding: 22px 0;
+                margin-bottom: 0;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .area .heading-md::after {
+                content: '+';
+                font-family: 'Inter', sans-serif;
+                font-weight: 300;
+                font-size: 22px;
+                color: var(--sage);
+                flex-shrink: 0;
+                margin-left: 16px;
+                transition: transform 0.3s ease;
+            }
+            .area.open .heading-md::after {
+                content: '\2212';
+            }
+            .area .body-text {
+                max-height: 0;
+                overflow: hidden;
+                opacity: 0;
+                transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+                padding-bottom: 0;
+            }
+            .area.open .body-text {
+                max-height: 300px;
+                opacity: 1;
+                padding-bottom: 24px;
+            }
             .bio-grid { grid-template-columns: 1fr; gap: 40px; }
             .governance-roles { flex-direction: column; gap: 32px; }
             .contact-grid { grid-template-columns: 1fr; gap: 48px; }
@@ -677,10 +719,14 @@
             .hamburger { display: block; }
             .nav-inner { height: 56px; }
             .nav-logo { height: 48px; }
-            .hero { padding-top: 56px; min-height: auto; padding-bottom: 56px; }
+            .hero { padding-top: 56px; min-height: auto; padding-bottom: 72px; }
             .hero-content { padding-top: 32px; }
             .hero h1 { margin-bottom: 28px; }
             .hero-label { margin-bottom: 20px; }
+            .mobile-break {
+                display: block;
+                height: 18px;
+            }
             .mobile-menu { top: 56px; }
             .impact-metrics { grid-template-columns: 1fr; gap: 32px; }
             .hero-content { max-width: 100%; }
@@ -696,9 +742,7 @@
             .areas { padding: 44px 0 48px 0; }
             .areas-header { margin-bottom: 40px; }
             .areas-header .heading-lg { margin-bottom: 16px; }
-            .areas-grid { gap: 48px; }
-            .area { padding-top: 28px; }
-            .area .heading-md { margin-bottom: 14px; }
+            .areas-header { margin-bottom: 32px; }
             .bio { padding: 64px 0; }
             .bio-grid { gap: 32px; }
             .bio-right .body-text { margin-bottom: 24px; }
@@ -771,7 +815,7 @@
                 <div class="hero-content">
                     <div class="label hero-label">Climate &amp; Sustainability Advisory</div>
                     <h1 class="heading-xl">Where climate strategy<br>meets capital.</h1>
-                    <p class="body-text">Carbon Balance is an independent climate finance advisory that helps institutions structure, launch, and deploy capital into the climate and sustainability transition. Built on decades of experience across climate and sustainability finance — and a deep network spanning finance, government, and philanthropy.</p>
+                    <p class="body-text">Carbon Balance is an independent climate finance advisory that helps institutions structure, launch, and deploy capital into the climate and sustainability transition. <span class="mobile-break"></span>Built on decades of experience across climate and sustainability finance — and a deep network spanning finance, government, and philanthropy.</p>
                 </div>
                 <svg class="hero-bookmark" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <polygon points="200,80 314,163 271,297 129,297 86,163" fill="none" stroke="#15332a" stroke-width="0.8"/>
@@ -977,6 +1021,20 @@
             link.addEventListener('click', () => {
                 hamburger.classList.remove('active');
                 mobileMenu.classList.remove('open');
+            });
+        });
+
+        // Areas accordion — mobile only
+        const isMobile = () => window.matchMedia('(max-width: 900px)').matches;
+        document.querySelectorAll('.area .heading-md').forEach(heading => {
+            heading.addEventListener('click', () => {
+                if (!isMobile()) return;
+                const area = heading.closest('.area');
+                const wasOpen = area.classList.contains('open');
+                // Close all others
+                document.querySelectorAll('.area.open').forEach(a => a.classList.remove('open'));
+                // Toggle clicked one
+                if (!wasOpen) area.classList.add('open');
             });
         });
 
