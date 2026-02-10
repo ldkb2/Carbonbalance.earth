@@ -500,6 +500,63 @@
             transform: translateY(0);
         }
 
+        /* ── Hamburger Menu ── */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--cream);
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            background: var(--dark-green);
+            padding: 24px clamp(16px, 3vw, 40px);
+            z-index: 99;
+            border-top: 1px solid rgba(250, 249, 247, 0.1);
+        }
+        .mobile-menu.open {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .mobile-menu a {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 15px;
+            color: var(--cream);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.2s ease;
+        }
+        .mobile-menu a:hover { opacity: 1; }
+        .mobile-menu .nav-cta {
+            display: inline-block;
+            width: fit-content;
+            margin-top: 4px;
+        }
+
         /* ── Responsive ── */
         @media (max-width: 900px) {
             .areas-grid { grid-template-columns: 1fr; gap: 40px; }
@@ -507,9 +564,24 @@
             .governance-roles { flex-direction: column; gap: 32px; }
             .contact-grid { grid-template-columns: 1fr; gap: 48px; }
             .nav-links { display: none; }
+            .hamburger { display: block; }
+            .nav-inner { height: 56px; }
+            .nav-logo { height: 48px; }
+            .hero { padding-top: 56px; }
+            .mobile-menu { top: 56px; }
             .impact-metrics { grid-template-columns: 1fr; gap: 32px; }
             .hero-content { max-width: 100%; }
             .hero-bookmark { display: none; }
+            .statement-inner { grid-template-columns: 1fr; gap: 24px; }
+            .statement { padding: 32px 0 40px 0; }
+            .heading-xl { font-size: clamp(32px, 8vw, 42px); }
+            .heading-lg { font-size: clamp(24px, 6vw, 32px); }
+            .hero-content .body-text { font-size: 14px; padding: 16px 18px; }
+            .areas { padding: 40px 0 60px 0; }
+            .bio { padding: 60px 0; }
+            .bio-grid { gap: 40px; }
+            .contact { padding: 60px 0; }
+            .contact-grid { gap: 32px; }
         }
     </style>
 </head>
@@ -541,8 +613,18 @@
                 <li><a href="#impact">About</a></li>
                 <li><a href="#contact" class="nav-cta">Get in touch</a></li>
             </ul>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="#approach">Areas of Expertise</a>
+        <a href="#impact">About</a>
+        <a href="#contact" class="nav-cta">Get in touch</a>
+    </div>
 
     <!-- Hero -->
     <section class="hero">
@@ -718,6 +800,21 @@
             } else {
                 nav.style.boxShadow = 'none';
             }
+        });
+
+        // Hamburger menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobile-menu');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('open');
+        });
+        // Close mobile menu when a link is clicked
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('open');
+            });
         });
 
         // Contact form — submit via fetch so user stays on page
